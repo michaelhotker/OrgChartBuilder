@@ -23,6 +23,7 @@ export const ChartProvider = ({ children }) => {
   const [colorByColumn, setColorByColumn] = useState(''); // Column to use for node coloring
   const [valueColors, setValueColors] = useState({}); // { value: '#color' } mapping
   const [chartData, setChartData] = useState(null);
+  const [filters, setFilters] = useState({}); // { columnName: { type: 'equals'|'contains'|'startsWith'|'endsWith', value: string } }
   const [error, setError] = useState('');
 
   return (
@@ -50,6 +51,8 @@ export const ChartProvider = ({ children }) => {
         setValueColors,
         chartData,
         setChartData,
+        filters,
+        setFilters,
         error,
         setError,
       }}

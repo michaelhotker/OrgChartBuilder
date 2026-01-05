@@ -1,0 +1,245 @@
+.filter-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filter-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.filter-panel-header:hover {
+  background-color: #f7fafc;
+}
+
+.filter-panel-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-count {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a5568;
+  background-color: #edf2f7;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+}
+
+.filter-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #4a5568;
+  cursor: pointer;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.filter-toggle-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.filter-panel-content {
+  padding: 1.25rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.active-filters {
+  margin-bottom: 1.5rem;
+}
+
+.filter-item {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.filter-column-name {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.95rem;
+}
+
+.remove-filter-btn {
+  background: #fed7d7;
+  border: none;
+  color: #c53030;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.remove-filter-btn:hover {
+  background: #fc8181;
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.filter-controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.filter-type-select {
+  flex: 0 0 140px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.9rem;
+  color: #2d3748;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filter-type-select:hover {
+  border-color: #a0aec0;
+}
+
+.filter-type-select:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.filter-input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.filter-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #2d3748;
+  transition: border-color 0.2s;
+}
+
+.filter-input:hover {
+  border-color: #a0aec0;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.clear-all-btn {
+  width: 100%;
+  padding: 0.6rem;
+  background: #fed7d7;
+  border: 1px solid #fc8181;
+  border-radius: 4px;
+  color: #c53030;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+.clear-all-btn:hover {
+  background: #fc8181;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-filter-section {
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.add-filter-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.column-selector {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.9rem;
+  color: #2d3748;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.column-selector:hover {
+  border-color: #a0aec0;
+}
+
+.column-selector:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.no-filters-message {
+  text-align: center;
+  color: #718096;
+  font-size: 0.9rem;
+  padding: 1rem;
+  background: #f7fafc;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-type-select {
+    flex: 1;
+    width: 100%;
+  }
+}
+
