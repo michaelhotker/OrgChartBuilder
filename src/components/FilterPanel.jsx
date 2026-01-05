@@ -33,30 +33,34 @@ export default function FilterPanel({ headers, filters, onFiltersChange, excelDa
 
   const handleAddFilter = (column) => {
     if (!column) return;
-    setActiveFilters(prev => ({
-      ...prev,
-      [column]: { type: 'contains', value: '' }
-    }));
-    updateFilters({ ...activeFilters, [column]: { type: 'contains', value: '' } });
+    setActiveFilters(prev => {
+      const newFilters = { ...prev, [column]: { type: 'contains', value: '' } };
+      // Don't call updateFilters here - wait until user enters a value
+      return newFilters;
+    });
   };
 
   const handleRemoveFilter = (column) => {
-    const newFilters = { ...activeFilters };
-    delete newFilters[column];
-    setActiveFilters(newFilters);
-    updateFilters(newFilters);
+    setActiveFilters(prev => {
+      const newFilters = { ...prev };
+      delete newFilters[column];
+      updateFilters(newFilters);
+      return newFilters;
+    });
   };
 
   const handleFilterChange = (column, field, value) => {
-    const newFilters = {
-      ...activeFilters,
-      [column]: {
-        ...(activeFilters[column] || { type: 'contains', value: '' }),
-        [field]: value
-      }
-    };
-    setActiveFilters(newFilters);
-    updateFilters(newFilters);
+    setActiveFilters(prev => {
+      const newFilters = {
+        ...prev,
+        [column]: {
+          ...(prev[column] || { type: 'contains', value: '' }),
+          [field]: value
+        }
+      };
+      updateFilters(newFilters);
+      return newFilters;
+    });
   };
 
   const handleClearAll = () => {

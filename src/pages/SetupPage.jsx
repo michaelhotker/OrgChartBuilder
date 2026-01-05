@@ -2,8 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FileUpload from '../components/FileUpload';
 import ColumnSelector from '../components/ColumnSelector';
-import ColumnConfigurator from '../components/ColumnConfigurator';
 import ColorBySelector from '../components/ColorBySelector';
+import EmploymentTypeSelector from '../components/EmploymentTypeSelector';
 import { useChartContext } from '../context/ChartContext';
 import { parseExcelFile, buildOrgChart } from '../utils/excelParser';
 import './SetupPage.css';
@@ -32,6 +32,12 @@ export default function SetupPage() {
     valueColors,
     setValueColors,
     setChartData,
+    employmentTypeColumn,
+    setEmploymentTypeColumn,
+    fieldGroups,
+    setFieldGroups,
+    typeColors,
+    setTypeColors,
     error,
     setError,
   } = useChartContext();
@@ -80,17 +86,6 @@ export default function SetupPage() {
     updateChart(positionColumn, managerColumn, newDisplayColumns);
   };
 
-  const handleColumnConfigChange = (column, config) => {
-    setColumnConfig(prev => ({
-      ...prev,
-      [column]: config
-    }));
-  };
-
-  const handleColumnReorder = (newOrder) => {
-    setDisplayColumns(newOrder);
-  };
-
   const handleColorByColumnChange = (column) => {
     setColorByColumn(column);
   };
@@ -100,6 +95,22 @@ export default function SetupPage() {
       ...prev,
       [value]: color
     }));
+  };
+
+  const handleEmploymentTypeColumnChange = (column) => {
+    setEmploymentTypeColumn(column);
+    // Clear field groups when employment type column changes
+    if (!column) {
+      setFieldGroups({});
+    }
+  };
+
+  const handleFieldGroupsChange = (newFieldGroups) => {
+    setFieldGroups(newFieldGroups);
+  };
+
+  const handleTypeColorsChange = (newTypeColors) => {
+    setTypeColors(newTypeColors);
   };
 
   const updateChart = useCallback((posCol, mgrCol, dispCols) => {
@@ -164,6 +175,22 @@ export default function SetupPage() {
               onDisplayColumnToggle={handleDisplayColumnToggle}
             />
             
+            <EmploymentTypeSelector
+              headers={headers}
+              excelData={excelData}
+              employmentTypeColumn={employmentTypeColumn}
+              onEmploymentTypeColumnChange={handleEmploymentTypeColumnChange}
+              fieldGroups={fieldGroups}
+              onFieldGroupsChange={handleFieldGroupsChange}
+              typeColors={typeColors}
+              onTypeColorsChange={handleTypeColorsChange}
+              positionColumn={positionColumn}
+              managerColumn={managerColumn}
+              displayColumns={displayColumns}
+              enabled={true}
+              sampleData={excelData && excelData[0] ? excelData[0] : {}}
+            />
+            
             <ColorBySelector
               headers={headers}
               excelData={excelData}
@@ -172,18 +199,6 @@ export default function SetupPage() {
               onColorByColumnChange={handleColorByColumnChange}
               onValueColorChange={handleValueColorChange}
             />
-
-            {displayColumns.length > 0 && (
-              <ColumnConfigurator
-                displayColumns={displayColumns}
-                columnConfig={columnConfig}
-                onConfigChange={handleColumnConfigChange}
-                onReorder={handleColumnReorder}
-                sampleData={excelData && excelData[0] ? excelData[0] : {}}
-                headerFields={headerFields}
-                onHeaderFieldsChange={setHeaderFields}
-              />
-            )}
             
             <div className="action-section">
               <button 

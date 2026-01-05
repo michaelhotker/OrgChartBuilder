@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Tree, TreeNode } from 'react-organizational-chart';
+import { getColumnsForEmploymentType } from '../utils/employmentTypeAnalyzer';
 import './OrgChart.css';
 
-export default function OrgChart({ chartData, displayColumns, headerFields = [], columnConfig = {}, colorByColumn = '', valueColors = {} }) {
+export default function OrgChart({ chartData, displayColumns, headerFields = [], columnConfig = {}, colorByColumn = '', valueColors = {}, employmentTypeColumn = '', fieldGroups = {}, typeColors = {} }) {
   const [expandedNodes, setExpandedNodes] = useState(new Set());
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -114,8 +115,18 @@ export default function OrgChart({ chartData, displayColumns, headerFields = [],
       return brightness > 128 ? '#1a202c' : '#ffffff';
     };
 
-    // Get node color based on colorByColumn value
+    // Get node color based on employment type or colorByColumn value
     const getNodeColor = () => {
+      // First check if there's a type-specific color
+      if (employmentTypeColumn && typeColors && Object.keys(typeColors).length > 0) {
+        const employmentType = node.data && node.data[employmentTypeColumn] 
+          ? String(node.data[employmentTypeColumn]).trim() 
+          : '';
+        if (employmentType && typeColors[employmentType]) {
+          return typeColors[employmentType];
+        }
+      }
+      // Fall back to colorByColumn
       if (!colorByColumn || !node.data) return null;
       const value = node.data[colorByColumn];
       if (value === undefined || value === null || value === '') return null;
@@ -133,9 +144,35 @@ export default function OrgChart({ chartData, displayColumns, headerFields = [],
 
     const textStyle = nodeTextColor ? { color: nodeTextColor } : {};
     
+    // Filter columns based on employment type if enabled
+    // fieldGroups[type] contains type-specific fields only
+    // We need to combine displayColumns + type-specific fields, preserving order
+    let relevantColumns = displayColumns;
+    if (employmentTypeColumn && fieldGroups && Object.keys(fieldGroups).length > 0) {
+      const employmentType = node.data && node.data[employmentTypeColumn] 
+        ? String(node.data[employmentTypeColumn]).trim() 
+        : '';
+      const typeSpecificFields = getColumnsForEmploymentType(fieldGroups, employmentType);
+      
+      // Combine displayColumns (at top) + type-specific fields (below)
+      // This matches the preview card structure
+      if (typeSpecificFields.length > 0) {
+        // Filter type-specific fields to only those not in displayColumns
+        const additionalFields = typeSpecificFields.filter(col => !displayColumns.includes(col));
+        // Combine: displayColumns first, then type-specific fields
+        relevantColumns = [...displayColumns, ...additionalFields];
+        
+        // Add employment type column at the beginning if it's in displayColumns
+        if (displayColumns.includes(employmentTypeColumn) && relevantColumns[0] !== employmentTypeColumn) {
+          relevantColumns = [employmentTypeColumn, ...relevantColumns.filter(col => col !== employmentTypeColumn)];
+        }
+      }
+      // If no type-specific fields, show all displayColumns (default behavior)
+    }
+    
     // Split columns into header (above line) and detail (below line)
-    const headerCols = displayColumns.filter(col => headerFields.includes(col));
-    const detailCols = displayColumns.filter(col => !headerFields.includes(col));
+    const headerCols = relevantColumns.filter(col => headerFields.includes(col));
+    const detailCols = relevantColumns.filter(col => !headerFields.includes(col));
     
     return (
       <div 

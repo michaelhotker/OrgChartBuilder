@@ -22,7 +22,10 @@ export default function ChartPage() {
     managerColumn,
     filters,
     setFilters,
-    setChartData
+    setChartData,
+    employmentTypeColumn,
+    fieldGroups,
+    typeColors
   } = useChartContext();
 
   // Filter data based on active filters
@@ -145,6 +148,9 @@ export default function ChartPage() {
             columnConfig={columnConfig}
             colorByColumn={colorByColumn}
             valueColors={valueColors}
+            employmentTypeColumn={employmentTypeColumn}
+            fieldGroups={fieldGroups}
+            typeColors={typeColors}
           />
         </div>
       </div>

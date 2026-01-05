@@ -18,11 +18,50 @@ export async function parseExcelFile(file) {
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
         
-        // Convert to JSON
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+        // Get headers directly from the first row of the sheet
+        // This ensures we get ALL columns, even if they're empty in some rows
+        const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1');
+        const headers = [];
+        const headerRow = range.s.r; // First row (usually 0)
         
-        // Get headers
-        const headers = Object.keys(jsonData[0] || {});
+        if (range.e.c >= 0) {
+          for (let col = range.s.c; col <= range.e.c; col++) {
+            const cellAddress = XLSX.utils.encode_cell({ r: headerRow, c: col });
+            const cell = worksheet[cellAddress];
+            let headerName = '';
+            
+            if (cell && cell.v !== undefined && cell.v !== null) {
+              headerName = String(cell.v).trim();
+            }
+            
+            // If header is empty, use default column name (A, B, C, etc.)
+            if (!headerName) {
+              headerName = XLSX.utils.encode_col(col);
+            }
+            
+            headers.push(headerName);
+          }
+        }
+        
+        // Convert to JSON - use header: 1 to get arrays (header row is automatically skipped)
+        const rawData = XLSX.utils.sheet_to_json(worksheet, { 
+          defval: '',
+          header: 1 // Get arrays instead of objects
+        });
+        
+        // Skip the header row and convert arrays to objects using our headers
+        const jsonData = [];
+        if (rawData.length > 1) {
+          // Skip first row (index 0) as it's the header row
+          for (let i = 1; i < rawData.length; i++) {
+            const row = rawData[i] || [];
+            const rowObj = {};
+            headers.forEach((header, index) => {
+              rowObj[header] = row[index] !== undefined && row[index] !== null ? row[index] : '';
+            });
+            jsonData.push(rowObj);
+          }
+        }
         
         resolve({
           headers,

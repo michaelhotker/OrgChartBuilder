@@ -24,6 +24,9 @@ export const ChartProvider = ({ children }) => {
   const [valueColors, setValueColors] = useState({}); // { value: '#color' } mapping
   const [chartData, setChartData] = useState(null);
   const [filters, setFilters] = useState({}); // { columnName: { type: 'equals'|'contains'|'startsWith'|'endsWith', value: string } }
+  const [employmentTypeColumn, setEmploymentTypeColumn] = useState(''); // Column name that contains employment type
+  const [fieldGroups, setFieldGroups] = useState({}); // { employmentType: [columnNames] } - intelligently grouped columns
+  const [typeColors, setTypeColors] = useState({}); // { employmentType: '#color' } - color for each employment type
   const [error, setError] = useState('');
 
   return (
@@ -53,6 +56,12 @@ export const ChartProvider = ({ children }) => {
         setChartData,
         filters,
         setFilters,
+        employmentTypeColumn,
+        setEmploymentTypeColumn,
+        fieldGroups,
+        setFieldGroups,
+        typeColors,
+        setTypeColors,
         error,
         setError,
       }}
